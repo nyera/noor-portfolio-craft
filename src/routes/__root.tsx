@@ -4,33 +4,70 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { images } from "@/data/site";
 
-function NotFoundComponent() {
+function CookieNotice() {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 1200);
+    return () => clearTimeout(t);
+  }, []);
+  if (!visible) return null;
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+    <div className="fixed inset-x-0 bottom-0 z-80 border-t border-border bg-background/97 backdrop-blur-sm">
+      <div className="shell flex flex-col items-start gap-4 py-5 md:flex-row md:items-center md:justify-between">
+        <p className="t-caption max-w-2xl">
+          نستخدم ملفات تعريف الارتباط لتحسين تجربة التصفّح وقياس أداء المعارض. يمكنك مراجعة سياسة
+          الخصوصية في أي وقت.
         </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
-          </Link>
+        <div className="flex shrink-0 gap-3">
+          <button onClick={() => setVisible(false)} className="btn btn-outline px-5 py-2.5 text-xs">
+            الأساسية فقط
+          </button>
+          <button onClick={() => setVisible(false)} className="btn btn-solid px-5 py-2.5 text-xs">
+            موافق
+          </button>
         </div>
       </div>
     </div>
+  );
+}
+
+function NotFoundComponent() {
+  return (
+    <main className="relative flex min-h-screen items-center">
+      <img
+        src={images.portrait1}
+        alt=""
+        aria-hidden="true"
+        className="absolute inset-0 h-full w-full object-cover opacity-25 grayscale"
+      />
+      <div className="shell relative py-40 text-center">
+        <p className="t-eyebrow">خطأ ٤٠٤</p>
+        <h1 className="t-display mt-6">يبدو أن هذه الصورة ضاعت في الطريق.</h1>
+        <p className="t-lead mx-auto mt-6 max-w-xl">
+          الصفحة التي تبحث عنها غير موجودة أو تم نقلها. يمكنك العودة إلى الرئيسية أو تصفّح الأعمال.
+        </p>
+        <div className="mt-10 flex flex-wrap justify-center gap-4">
+          <Link to="/" className="btn btn-solid">
+            العودة للرئيسية
+          </Link>
+          <Link to="/portfolio" className="btn btn-outline">
+            تصفّح الأعمال
+          </Link>
+        </div>
+      </div>
+    </main>
   );
 }
 
@@ -42,33 +79,29 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+    <main className="flex min-h-screen items-center justify-center px-4">
+      <div className="max-w-lg text-center">
+        <p className="t-eyebrow">خطأ ٥٠٠</p>
+        <h1 className="t-h1 mt-5">تعذّر تحميل هذه الصفحة</h1>
+        <p className="t-lead mt-4">
+          حدث خلل غير متوقع أثناء تحميل المحتوى. جرّب التحديث أو العودة إلى الصفحة الرئيسية.
         </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
+        <div className="mt-9 flex flex-wrap justify-center gap-3">
           <button
             onClick={() => {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="btn btn-solid"
           >
-            Try again
+            إعادة المحاولة
           </button>
-          <a
-            href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
-          >
-            Go home
+          <a href="/" className="btn btn-outline">
+            الصفحة الرئيسية
           </a>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 
@@ -77,19 +110,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "نُور | استوديو تصوير فوتوغرافي" },
+      {
+        name: "description",
+        content: "استوديو نُور للتصوير الفوتوغرافي — أعراس، بورتريه، أزياء وتصوير تجاري.",
+      },
+      { name: "author", content: "NOOR Studio" },
+      { property: "og:site_name", content: "NOOR — نُور" },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "ar_SA" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: appCss,
+        href: "https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap",
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
@@ -102,7 +140,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="ar" dir="rtl">
       <head>
         <HeadContent />
       </head>
@@ -116,11 +154,18 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const transparent = pathname === "/";
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <Header transparent={transparent} />
+      <div id="main">
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+      </div>
+      <Footer />
+      <CookieNotice />
     </QueryClientProvider>
   );
 }
