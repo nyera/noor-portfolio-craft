@@ -4,7 +4,6 @@ import {
   brand,
   categories,
   images,
-  posts,
   projects,
   services,
   stats,
@@ -46,7 +45,6 @@ const instagram = [
 function Home() {
   const [filter, setFilter] = useState("all");
   const visible = filter === "all" ? projects : projects.filter((p) => p.category === filter);
-  const [featured, ...rest] = posts;
 
   return (
     <main>
@@ -319,73 +317,6 @@ function Home() {
             </li>
           ))}
         </ul>
-      </section>
-
-      {/* JOURNAL */}
-      <section className="section bg-surface text-surface-foreground">
-        <div className="shell">
-          <SectionHead
-            eyebrow="المدوّنة"
-            title="مقالات عن الضوء والصورة"
-            action={
-              <Link to="/journal" className="btn btn-outline shrink-0">
-                كل المقالات
-              </Link>
-            }
-          />
-          <div className="grid gap-12 lg:grid-cols-2">
-            <Reveal>
-              <article className="group">
-                <Link to="/journal/$slug" params={{ slug: featured.slug }}>
-                  <div className="img-zoom">
-                    <img
-                      src={featured.image}
-                      alt={featured.title}
-                      loading="lazy"
-                      className="w-full object-cover"
-                      style={{ aspectRatio: "16 / 10" }}
-                    />
-                  </div>
-                  <p className="t-caption mt-6">
-                    {featured.category} · {featured.date} · {featured.readingTime}
-                  </p>
-                  <h3 className="t-h3 mt-3 transition-colors group-hover:text-accent">
-                    {featured.title}
-                  </h3>
-                  <p className="t-lead mt-3">{featured.excerpt}</p>
-                </Link>
-              </article>
-            </Reveal>
-
-            <ul className="divide-y divide-border border-t border-border">
-              {rest.slice(0, 3).map((p) => (
-                <li key={p.slug}>
-                  <Link
-                    to="/journal/$slug"
-                    params={{ slug: p.slug }}
-                    className="group flex items-center gap-6 py-7"
-                  >
-                    <img
-                      src={p.image}
-                      alt=""
-                      aria-hidden="true"
-                      loading="lazy"
-                      className="size-24 shrink-0 object-cover"
-                    />
-                    <span>
-                      <span className="t-caption block">
-                        {p.category} · {p.readingTime}
-                      </span>
-                      <span className="mt-2 block font-display text-xl transition-colors group-hover:text-accent">
-                        {p.title}
-                      </span>
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
       </section>
 
       {/* FINAL CTA */}
