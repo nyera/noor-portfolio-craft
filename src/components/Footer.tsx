@@ -32,9 +32,7 @@ export function Footer() {
             {[
               { to: "/portfolio", label: "الأعمال" },
               { to: "/about", label: "عن الاستوديو" },
-              { to: "/journal", label: "المدوّنة" },
               { to: "/pricing", label: "الباقات" },
-              { to: "/shop", label: "المتجر" },
               { to: "/contact", label: "تواصل" },
             ].map((l) => (
               <li key={l.to}>

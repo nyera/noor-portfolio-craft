@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { posts, projects, services } from "@/data/site";
+import { projects, services } from "@/data/site";
 
 type Result = { title: string; type: string; to: string; params?: Record<string, string> };
 
@@ -16,12 +16,6 @@ const index: Result[] = [
     type: "خدمة",
     to: "/services/$slug",
     params: { slug: s.slug },
-  })),
-  ...posts.map((p) => ({
-    title: p.title,
-    type: "مقال",
-    to: "/journal/$slug",
-    params: { slug: p.slug },
   })),
   { title: "عن الاستوديو", type: "صفحة", to: "/about" },
   { title: "الباقات والأسعار", type: "صفحة", to: "/pricing" },
@@ -70,14 +64,14 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
         </div>
 
         <label htmlFor="site-search" className="sr-only">
-          ابحث في الأعمال والخدمات والمقالات
+          ابحث في الأعمال والخدمات
         </label>
         <input
           id="site-search"
           autoFocus
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="ابحث عن مشروع، خدمة، أو مقال…"
+          placeholder="ابحث عن مشروع أو خدمة…"
           className="field mt-10 border-b-2 pb-6 font-display text-3xl md:text-5xl"
         />
 
@@ -86,7 +80,7 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
             <div>
               <p className="t-caption">اقتراحات سريعة</p>
               <ul className="mt-5 flex flex-wrap gap-3">
-                {["أعراس", "بورتريه", "الباقات", "الساعة الذهبية"].map((s) => (
+                {["أعراس", "بورتريه", "الباقات", "تواصل"].map((s) => (
                   <li key={s}>
                     <button
                       type="button"
