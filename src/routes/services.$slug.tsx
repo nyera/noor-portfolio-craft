@@ -122,10 +122,10 @@ function SingleService() {
             <h2 className="t-h2">رأي عميل</h2>
             <figure className="mt-8">
               <blockquote className="font-display text-2xl leading-[2]">
-                «{testimonials[0].quote}»
+                «{testimonials[0]!.quote}»
               </blockquote>
               <figcaption className="t-caption mt-6">
-                {testimonials[0].name} — {testimonials[0].role}
+                {testimonials[0]!.name} — {testimonials[0]!.role}
               </figcaption>
             </figure>
           </div>

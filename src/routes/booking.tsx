@@ -30,7 +30,7 @@ function BookingPage() {
     phone: "",
     date: "",
     service: "",
-    pkg: packages[1].name,
+    pkg: packages[1]!.name,
     location: "",
     notes: "",
   });
@@ -275,10 +275,10 @@ function Field({
   label: string;
   value: string;
   onChange: (v: string) => void;
-  error?: string;
-  type?: string;
-  required?: boolean;
-  placeholder?: string;
+  error?: string | undefined;
+  type?: string | undefined;
+  required?: boolean | undefined;
+  placeholder?: string | undefined;
 }) {
   return (
     <div>

@@ -10,9 +10,9 @@ export const Route = createFileRoute("/portfolio/$slug")({
     const index = projects.findIndex((p) => p.slug === params.slug);
     if (index === -1) throw notFound();
     return {
-      project: projects[index],
-      prev: projects[(index - 1 + projects.length) % projects.length],
-      next: projects[(index + 1) % projects.length],
+      project: projects[index]!,
+      prev: projects[(index - 1 + projects.length) % projects.length]!,
+      next: projects[(index + 1) % projects.length]!,
     };
   },
   head: ({ loaderData }) => {
